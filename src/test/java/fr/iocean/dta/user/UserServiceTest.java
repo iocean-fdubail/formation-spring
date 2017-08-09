@@ -1,7 +1,8 @@
-package fr.iocean.dta;
+package fr.iocean.dta.user;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import fr.iocean.dta.App;
 import fr.iocean.dta.user.model.User;
 import fr.iocean.dta.user.repository.UserRepository;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -28,6 +30,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 	
 	@Test
+	@Ignore
     public void testApp() {
         try {
             
