@@ -28,8 +28,7 @@ public class UserServiceTest {
     private UserRepository userRepository;
 	
 	@Test
-    public void testAppWithHibernate() {
-		System.setProperty("spring.profiles.active", "JPA");
+    public void testApp() {
         try {
             
 			/* Clean */
