@@ -6,6 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
 import fr.iocean.dta.persistence.IoEntity;
 
 @Entity
@@ -18,10 +21,14 @@ public class User implements IoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
+    @NotBlank
     private String login;
 
+    @NotBlank
     private String password;
 	
+	@NotBlank
+	@Length(max = 100)
 	private String name;
 	
 	public User() {
