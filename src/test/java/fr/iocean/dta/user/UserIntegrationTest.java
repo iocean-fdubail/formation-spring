@@ -2,6 +2,9 @@ package fr.iocean.dta.user;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import javax.validation.Validator;
+
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Assert;
@@ -21,7 +24,7 @@ public class UserIntegrationTest extends IntegrationTest {
 
 	@Autowired
 	UserService userService;
-
+	
 	@Test
 	public void testCreate() throws Exception {
 		User u = new User("test");
