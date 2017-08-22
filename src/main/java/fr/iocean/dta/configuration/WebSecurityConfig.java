@@ -10,41 +10,74 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
-import fr.iocean.dta.service.AuthenticationService;
+import fr.iocean.dta.authentication.service.AuthenticationService;
+import fr.iocean.dta.authentication.util.RestAccessDeniedHandler;
+import fr.iocean.dta.authentication.util.RestAuthenticationEntryPoint;
+import fr.iocean.dta.authentication.util.RestAuthenticationFailureHandler;
+import fr.iocean.dta.authentication.util.RestAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-  @Autowired
-  AuthenticationService authenticationService;
- 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-     http
-         .sessionManagement()
-         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-         .and()
-         .authorizeRequests()
-         .antMatchers("/api/public/**")
-         .permitAll()
-         .anyRequest()
-         .authenticated()
-         .and()
-         .httpBasic()
-         .and()
-         .csrf()
-         .disable();
-  }
- 
-  @Bean
-  public BCryptPasswordEncoder passwordEncoder() {
-     return new BCryptPasswordEncoder();
-  }
- 
-  @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-       auth.userDetailsService(authenticationService).passwordEncoder(passwordEncoder());
-  }
+	
+	@Autowired
+	AuthenticationService authenticationService;
+	@Autowired
+	RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+	@Autowired
+	RestAccessDeniedHandler restAccessDeniedHandler;
+	@Autowired
+	RestAuthenticationSuccessHandler restAuthenticationSuccessHandler;
+	@Autowired
+	RestAuthenticationFailureHandler restAuthenticationFailureHandler;
+	
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+		.sessionManagement()
+		.and()
+		.authorizeRequests()
+
+		.antMatchers("/api/public/**").permitAll()
+
+		.anyRequest().authenticated()
+		.and()
+		.exceptionHandling()
+		.authenticationEntryPoint(restAuthenticationEntryPoint)
+		.accessDeniedHandler(restAccessDeniedHandler)
+		.and()
+		.formLogin()
+		.loginProcessingUrl("/authenticate")
+		.successHandler(restAuthenticationSuccessHandler)
+		.failureHandler(restAuthenticationFailureHandler)
+		.usernameParameter("username")
+		.passwordParameter("password")
+		.permitAll()
+		.and()
+		.logout()
+		.logoutUrl("/logout")
+		.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+		
+		.permitAll()
+		
+		.and()
+		.httpBasic()
+		
+		.and()
+		.csrf().disable();
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(authenticationService).passwordEncoder(passwordEncoder());
+	}
 }

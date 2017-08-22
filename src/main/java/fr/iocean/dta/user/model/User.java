@@ -1,9 +1,16 @@
 package fr.iocean.dta.user.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
@@ -26,12 +33,18 @@ public class User implements IoEntity {
 
     @NotBlank
     private String password;
-	
+
 	@NotBlank
 	@Length(max = 100)
 	private String name;
 	
+	@ElementCollection
+	@CollectionTable(name="credentials", joinColumns=@JoinColumn(name="user_id"))
+	@Column(name="credential")
+	private List<String> credentials = new ArrayList<>();
+	
 	public User() {
+		credentials.add("ROLE_BASIC");
 	}
 
 	public User(String name) {
@@ -70,6 +83,14 @@ public class User implements IoEntity {
 		this.name = name;
 	}
 	
+	public List<String> getCredentials() {
+		return credentials;
+	}
+
+	public void setCredentials(List<String> credentials) {
+		this.credentials = credentials;
+	}
+
 	@Override
     public String toString() {
         return "User [id=" + id + ", name=" + name + " ,login=" + login + ", password=" + password + "]";

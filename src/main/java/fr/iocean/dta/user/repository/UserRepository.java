@@ -28,6 +28,7 @@ public class UserRepository extends AbstractJpaRepository<User> {
 	public void deleteAllUsers() {
 		getSession().createQuery("delete from User").executeUpdate();		
 		
-	}	
+	}
+
 	
 }
