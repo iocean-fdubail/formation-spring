@@ -41,10 +41,10 @@ public class User implements IoEntity {
 	@ElementCollection
 	@CollectionTable(name="credentials", joinColumns=@JoinColumn(name="user_id"))
 	@Column(name="credential")
-	private List<String> credentials = new ArrayList<>();
+	private List<String> roles = new ArrayList<>();
 	
 	public User() {
-		credentials.add("ROLE_BASIC");
+		roles.add("ROLE_BASIC");
 	}
 
 	public User(String name) {
@@ -82,13 +82,13 @@ public class User implements IoEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public List<String> getCredentials() {
-		return credentials;
+
+	public List<String> getRoles() {
+		return roles;
 	}
 
-	public void setCredentials(List<String> credentials) {
-		this.credentials = credentials;
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
 	@Override

@@ -33,6 +33,6 @@ public class AuthenticationService implements UserDetailsService {
 	}
 
 	private List<GrantedAuthority> getGrantedAuthorities(User user) {
-			return user.getCredentials().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+			return user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
 			}
 }
